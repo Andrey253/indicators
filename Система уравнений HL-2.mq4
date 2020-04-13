@@ -10,7 +10,7 @@
 #property indicator_color8  Gold
 int    i,counted_bars;
 extern int cm=3,por=4;  
-double x[2000][2000],y[10000],xx[1000],pr[1000],prl[1000],xxl[1000];
+double x[10000][10000],y[10000],xx[10000],pr[10000],prl[10000],xxl[10000];
 int k,z,m,n,p,a;
 double f,fl,mn;
 // Buffers for signals
@@ -45,7 +45,7 @@ int start() {
 counted_bars=IndicatorCounted();
       for (z=0;z<por;z++)
       { 
-          y[z]=Close[cm+z-1]-(High [cm+z-1] + Low [cm+z-1])/2;
+          y[z]=Close[cm+z-1] - Close[cm+z];//-(High [cm+z-1] + Low [cm+z-1])/2;
           for (k=0;k<por;k++)
              {
                x[z][k]=Close[cm+k+z]-(High [cm+k+z] + Low [cm+k+z])/2;
@@ -63,27 +63,27 @@ counted_bars=IndicatorCounted();
         for (k=(por-1);k>=0;k--)
            { xx[k]=(y[k]-pr[k])/x[k][k];for (z=k;z<=(por-1);z++) pr[k-1]=pr[k-1]+x[k-1][z]*xx[z]; }
    /////////////////////////////////////
-         for (z=0;z<por;z++)
-      { 
-          y[z]=Close[cm+z-1]-(High [cm+z-1] + Low [cm+z-1])/2;
-          for (k=0;k<por;k++)
-             {
-               x[z][k]=Close[cm+k+z]-(High [cm+k+z] + Low [cm+k+z])/2;
-               
-             }
-      }  
-    for (p=0;p<(por-1);p++)
-      {
-      for (n=p;n<(por-1);n++)
-         {if (x[p][p]!=0) mn=x[n+1][p]/x[p][p];
-         for (m=p;m<por;m++){x[n+1][m]=x[n+1][m]-x[p][m]*mn; }
-              y[n+1]=y[n+1]-y[p]*mn;
-         }
-       }
-        for (k=(por-1);k>=0;k--)
-           { xxl[k]=(y[k]-prl[k])/x[k][k];for (z=k;z<=(por-1);z++) prl[k-1]=prl[k-1]+x[k-1][z]*xxl[z]; }
+//         for (z=0;z<por;z++)
+//      { 
+//          y[z]=Close[cm+z-1]-(High [cm+z-1] + Low [cm+z-1])/2;
+//          for (k=0;k<por;k++)
+//             {
+//               x[z][k]=Close[cm+k+z]-(High [cm+k+z] + Low [cm+k+z])/2;
+//               
+//             }
+//      }  
+//    for (p=0;p<(por-1);p++)
+//      {
+//      for (n=p;n<(por-1);n++)
+//         {if (x[p][p]!=0) mn=x[n+1][p]/x[p][p];
+//         for (m=p;m<por;m++){x[n+1][m]=x[n+1][m]-x[p][m]*mn; }
+//              y[n+1]=y[n+1]-y[p]*mn;
+//         }
+//       }
+//        for (k=(por-1);k>=0;k--)
+//           { xxl[k]=(y[k]-prl[k])/x[k][k];for (z=k;z<=(por-1);z++) prl[k-1]=prl[k-1]+x[k-1][z]*xxl[z]; }
    /////////////////////////////////   
-   i=Bars-counted_bars-por-5;
+   i=Bars-counted_bars-5;
    while(i>0)
      {
      f=0;
@@ -92,12 +92,12 @@ counted_bars=IndicatorCounted();
             +(Close[i+a]-(High [i+a] + Low [i+a])/2)*xx[a]; }
     Buf_2[cm]=High[cm]+200*Point;
     Buf_1[i-1]=f+Close[i];
-    fl=0;
-    for (a=0;a<por;a++)
-         {  fl =fl
-            +(Close[i+a]-(High [i+a] - Low [i+a])/2)*xxl[a]; }
-    Buf_3[cm]=Low[cm]-200*Point;
-    Buf_7[i-1]=fl+Close[i];
+    //fl=0;
+    //for (a=0;a<por;a++)
+    //     {  fl =fl
+    //        +(Close[i+a]-(High [i+a] - Low [i+a])/2)*xxl[a]; }
+    //Buf_3[cm]=Low[cm]-200*Point;
+    //Buf_7[i-1]=fl+Close[i];
 
      i--;
    }
